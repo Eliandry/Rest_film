@@ -23,7 +23,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ReviewFilm(admin.TabularInline):
-    model = Review
+    model = Reviews
     extra = 0
     readonly_fields = ('name', 'email')
 
@@ -85,7 +85,7 @@ class GenreAdmin(admin.ModelAdmin):
     prepopulated_fields = {'url': ('name',)}
 
 
-@admin.register(Review)
+@admin.register(Reviews)
 class ReviewAdmin(admin.ModelAdmin):
     readonly_fields = ('name', 'email')
 
