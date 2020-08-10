@@ -10,7 +10,7 @@ class MovieList(generics.ListAPIView):
     serializer_class = MovieRest
     filter_backends = (DjangoFilterBackend,)
     filterset_class=MovieFilter
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(
             rating_user=models.Count('ratings', filter=models.Q(ratings__ip=get_client_ip(self.request)))
