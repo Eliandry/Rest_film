@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import generics, permissions
 from .serializers import *
-from .service import get_client_ip, MovieFilter
+from .service import get_client_ip, MovieFilter,PaginationActor
 from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -45,7 +45,7 @@ class AddRating(generics.CreateAPIView):
 class ActorListView(generics.ListAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorListRest
-
+    pagination_class = PaginationActor
 
 class ActorDetailView(generics.RetrieveAPIView):
     queryset = Actor.objects.all()
