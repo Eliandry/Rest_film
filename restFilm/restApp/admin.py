@@ -2,9 +2,16 @@ from django.contrib import admin
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 
+from import_export.admin import ImportExportActionModelAdmin
+from import_export import resources, fields
 
 from .models import *
 from django.utils.safestring import mark_safe
+
+
+class MovieResource(resources.ModelResource):
+    class Meta:
+        model = Movie
 
 
 class MovieAdminForm(forms.ModelForm):
@@ -40,7 +47,8 @@ class ShotsFilm(admin.TabularInline):
 
 
 @admin.register(Movie)
-class MovieAdmin(admin.ModelAdmin):
+class MovieAdmin(ImportExportActionModelAdmin):
+    resource_class = MovieResource
     actions = ['publish', 'unpublish']
     list_display = ('title', 'category', 'url', 'draft', 'get_poster')
     prepopulated_fields = {'url': ('title',)}

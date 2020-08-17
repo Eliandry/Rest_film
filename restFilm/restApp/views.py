@@ -1,16 +1,22 @@
+from django.http import HttpResponse
 from django.shortcuts import render
-from rest_framework import generics,permissions
-from .models import *
+from rest_framework import generics, permissions
 from .serializers import *
-from .service import get_client_ip,MovieFilter
+from .service import get_client_ip, MovieFilter
 from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
+
+
+def main(request):
+    return render(request,'main.html')
+
 
 class MovieList(generics.ListAPIView):
     serializer_class = MovieRest
     filter_backends = (DjangoFilterBackend,)
-    filterset_class=MovieFilter
+    filterset_class = MovieFilter
     permission_classes = [permissions.IsAuthenticated]
+
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(
             rating_user=models.Count('ratings', filter=models.Q(ratings__ip=get_client_ip(self.request)))
@@ -31,8 +37,10 @@ class ReviewCreate(generics.CreateAPIView):
 
 class AddRating(generics.CreateAPIView):
     serializer_class = CreateRatingRest
-    def perform_create(self, serializer):    #Дополнение к save
+
+    def perform_create(self, serializer):  # Дополнение к save
         serializer.save(ip=get_client_ip(self.request))
+
 
 class ActorListView(generics.ListAPIView):
     queryset = Actor.objects.all()
